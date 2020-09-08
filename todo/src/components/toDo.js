@@ -26,7 +26,20 @@ const initialData = [
 const ToDo = () => {
     const [state, setState] = useState(initialData)
     const [todo, setTodo] = useState(initialvalue)
-    const [toggle, setToggle] = useState(false)
+    
+
+  const toggleCompleted = (id) => {
+      setState(state.map((data) =>{
+        if (data.id === id){
+            return {
+              ...data, 
+              completed: !data.completed
+            }
+          } else {
+            return data
+          }
+      }))
+  }
 
     const handleChanges =(e) => {
         const {name,value} = e.target
@@ -42,9 +55,14 @@ const ToDo = () => {
         }
        
         setState([...state,newTodo])
-        
+
         return setTodo(initialvalue)
         
+    }
+
+    const clearCompleted = e => {
+        e.preventDefault();
+        setState(state.filter(item => !item.completed))
     }
   
     
@@ -60,13 +78,14 @@ const ToDo = () => {
                 onChange={handleChanges}
             />
             <button >Add Todo</button>
-            <button >Clear Completed</button>
+            <button onClick={clearCompleted}>Clear Completed</button>
+            
         </form>
        <div>
            <h1>TODO</h1>
            {   
                state.map((data) =>(
-                <TodoList data={data} key={data.id}/>
+                <TodoList data={data} key={data.id} toggleCompleted={toggleCompleted}/>
                ))
             }
             
