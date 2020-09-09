@@ -1,69 +1,42 @@
 import React, { useState, useReducer } from 'react'
 import TodoList from './TodoList'
 
+import {todoReducer, initialState} from '../reducer/doReducer'
 
 
-const initialData = [
-    {
-      task: 'Organize Garage',
-      id: 1528817077286,
-      completed: false
-    },
-    {
-      task: 'Bake Cookies',
-      id: 1528817084358,
-      completed: false
-    }
-  ];
-  const initialvalue = {
-      task:''
 
-  }
+
+  
   
 
   
 
 const ToDo = () => {
-    const [state, setState] = useState(initialData)
-    const [todo, setTodo] = useState(initialvalue)
+   
+    const [todo, setTodo] = useState('')
+    const [state ,dispatch] =useReducer(todoReducer,initialState)
     
 
   const toggleCompleted = (id) => {
-      setState(state.map((data) =>{
-        if (data.id === id){
-            return {
-              ...data, 
-              completed: !data.completed
-            }
-          } else {
-            return data
-          }
-      }))
+    dispatch({
+        type:"TOGGLE_TASK", payload:id
+    })
   }
 
     const handleChanges =(e) => {
-        const {name,value} = e.target
-        setTodo({...todo,[name]:value})
+        setTodo(e.target.value)
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const newTodo = {
-            task: todo.task.trim(),
-            id: new Date(),
-            completed:false
-        }
+    const handleSubmit = (e) =>{
        
-        setState([...state,newTodo])
-
-        return setTodo(initialvalue)
+            e.preventDefault();
+            dispatch({type:"ADD_TASK", payload:todo})
+           return setTodo('')
         
     }
+  
 
-    const clearCompleted = e => {
-        e.preventDefault();
-        setState(state.filter(item => !item.completed))
-    }
+    
   
     
    
@@ -77,15 +50,21 @@ const ToDo = () => {
                 value={todo.task}
                 onChange={handleChanges}
             />
-            <button >Add Todo</button>
-            <button onClick={clearCompleted}>Clear Completed</button>
+            <button>Add Todo</button>
+            <button onClick= {(e) => {
+             
+                dispatch({
+                    type:"CLEAR_TASK",
+                })
+            }}>Clear Completed</button>
             
         </form>
        <div>
            <h1>TODO</h1>
            {   
                state.map((data) =>(
-                <TodoList data={data} key={data.id} toggleCompleted={toggleCompleted}/>
+                <TodoList data={data} key={data.id} 
+                toggleCompleted={toggleCompleted}/>
                ))
             }
             
