@@ -3,56 +3,41 @@ import TodoList from './TodoList'
 
 import {todoReducer, initialState} from '../reducer/doReducer'
 
-
-
-
-  
-  
-
-  
-
 const ToDo = () => {
    
     const [todo, setTodo] = useState('')
     const [state ,dispatch] =useReducer(todoReducer,initialState)
     
 
-  const toggleCompleted = (id) => {
-    dispatch({
-        type:"TOGGLE_TASK", payload:id
-    })
-  }
-
+    
     const handleChanges =(e) => {
         setTodo(e.target.value)
     }
-
     const handleSubmit = (e) =>{
-       
             e.preventDefault();
             dispatch({type:"ADD_TASK", payload:todo})
            return setTodo('')
-        
     }
-  
+    const toggleCompleted = (id) => {
+        dispatch({
+            type:"TOGGLE_TASK", payload:id
+        })
+    }
 
-    
   
-    
-   
     return (
         <div>
-        <form onSubmit={handleSubmit}>
+        <form >
             <input 
                 type="text"
                 name="task"
                 placeholder="add tasks"
-                value={todo.task}
+                value={todo}
                 onChange={handleChanges}
             />
-            <button>Add Todo</button>
+            <button onClick={handleSubmit}>Add Todo</button>
             <button onClick= {(e) => {
-             
+                e.preventDefault()
                 dispatch({
                     type:"CLEAR_TASK",
                 })
