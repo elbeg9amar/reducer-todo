@@ -13,11 +13,11 @@ const ToDo = () => {
     const handleChanges =(e) => {
         setTodo(e.target.value)
     }
-    const handleSubmit = (e) =>{
-            e.preventDefault();
-            dispatch({type:"ADD_TASK", payload:todo})
-           return setTodo('')
-    }
+    // const handleSubmit = (e) =>{
+    //         e.preventDefault();
+    //         dispatch({type:"ADD_TASK", payload:todo})
+    //        return setTodo('')
+    // }
     const toggleCompleted = (id) => {
         dispatch({
             type:"TOGGLE_TASK", payload:id
@@ -35,7 +35,10 @@ const ToDo = () => {
                 value={todo}
                 onChange={handleChanges}
             />
-            <button onClick={handleSubmit}>Add Todo</button>
+            <button onClick={(e) =>{
+            e.preventDefault();
+            dispatch({type:"ADD_TASK", payload:todo})
+           return setTodo('')}}>Add Todo</button>
             <button onClick= {(e) => {
                 e.preventDefault()
                 dispatch({
